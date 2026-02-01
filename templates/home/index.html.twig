@@ -1,0 +1,267 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil — Voyagez, gagnez des XP
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+	<style>
+		.scrollbar-hide::-webkit-scrollbar { display: none; }
+		.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+		@keyframes fade-in-up {
+			from { opacity: 0; transform: translateY(16px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+		@keyframes float {
+			0%, 100% { transform: translateY(0); }
+			50% { transform: translateY(-4px); }
+		}
+		@keyframes pulse-glow {
+			0%, 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
+			50% { box-shadow: 0 0 0 12px rgba(139, 92, 246, 0); }
+		}
+		@keyframes shimmer {
+			0% { background-position: -200% 0; }
+			100% { background-position: 200% 0; }
+		}
+		.animate-fade-in-up {
+			animation: fade-in-up 0.5s ease-out forwards;
+		}
+		.animate-float { animation: float 3s ease-in-out infinite; }
+		.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+		.stagger-1 { animation-delay: 0.05s; }
+		.stagger-2 { animation-delay: 0.1s; }
+		.stagger-3 { animation-delay: 0.15s; }
+		.stagger-4 { animation-delay: 0.2s; }
+		.stagger-5 { animation-delay: 0.25s; }
+		.stagger-6 { animation-delay: 0.3s; }
+		.stagger-7 { animation-delay: 0.35s; }
+		.stagger-8 { animation-delay: 0.4s; }
+		.opacity-0 { opacity: 0; }
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = {
+			theme: {
+				extend: {
+					colors: {
+						airbnb: '#ff385c',
+						'airbnb-hover': '#e31c5f',
+						'game': '#8b5cf6',
+						'game-light': '#a78bfa',
+						'game-dark': '#6d28d9',
+						'xp': '#06b6d4',
+						'gold': '#f59e0b',
+						'airbnb-dark': '#1f2937'
+					},
+					fontFamily: { cereal: ['DM Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'] },
+					animation: {
+						'fade-in': 'fade-in 0.4s ease-out',
+						'bounce-soft': 'bounce-soft 0.5s ease-out'
+					},
+					keyframes: {
+						'fade-in': { from: { opacity: '0', transform: 'translateY(8px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+						'bounce-soft': { '0%, 100%': { transform: 'scale(1)' }, '50%': { transform: 'scale(1.02)' } }
+					}
+				}
+			}
+		}
+	</script>
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<div class="min-h-screen bg-gradient-to-b from-slate-50 to-white font-cereal text-airbnb-dark antialiased">
+		{# ----- Header gamifié ----- #}
+		<header class="fixed top-0 left-0 right-0 z-50 border-b border-violet-100 bg-white/90 backdrop-blur-md shadow-sm">
+			<div class="mx-auto max-w-7xl px-4 sm:px-6">
+				<div class="flex h-16 items-center justify-between">
+					<a href="{{ path('app_home') }}" class="flex items-center gap-2 transition active:scale-95">
+						<div class="relative">
+							<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-game to-game-dark shadow-lg shadow-violet-200/50">
+								<svg class="h-6 w-6 text-white" viewBox="0 0 32 32" fill="currentColor">
+									<path d="M16 2C8.27 2 2 8.27 2 16s6.27 14 14 14 14-6.27 14-14S23.73 2 16 2zm0 4c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4zm0 20c-3.5 0-6.64-1.72-8.57-4.4.11-2.7 5.43-4.2 8.57-4.2s8.46 1.5 8.57 4.2C22.64 24.28 19.5 26 16 26z"/>
+								</svg>
+							</div>
+						</div>
+						<span class="text-xl font-bold bg-gradient-to-r from-game to-game-dark bg-clip-text text-transparent">StayQuest</span>
+					</a>
+
+					{# Barre XP + niveau (gamification) #}
+					<div class="hidden items-center gap-3 sm:flex">
+						<div class="flex items-center gap-2 rounded-full bg-violet-50 px-3 py-1.5">
+							<span class="text-xs font-bold text-game-dark">Niv. 7</span>
+							<div class="h-2 w-24 overflow-hidden rounded-full bg-violet-200">
+								<div class="h-full w-[65%] rounded-full bg-gradient-to-r from-xp to-cyan-400 transition-all duration-500" title="1 240 / 1 900 XP"></div>
+							</div>
+							<span class="text-xs font-semibold text-game">1 240 XP</span>
+						</div>
+						<button type="button" class="flex items-center gap-1.5 rounded-full border-2 border-amber-200 bg-amber-50 px-3 py-1.5 transition hover:scale-105 hover:border-amber-300 active:scale-95">
+							<span class="text-lg">🏆</span>
+							<span class="text-sm font-bold text-amber-700">3 badges</span>
+						</button>
+					</div>
+
+					{# Recherche (pill) #}
+					<div class="hidden flex-1 max-w-[340px] justify-center lg:flex">
+						<button type="button" class="flex w-full items-center gap-3 rounded-full border-2 border-gray-200 bg-white px-4 py-2.5 text-left shadow-sm transition-all duration-300 hover:border-game-light hover:shadow-md hover:shadow-violet-100">
+							<span class="text-sm font-semibold">Où ?</span>
+							<span class="text-gray-300">|</span>
+							<span class="flex-1 truncate text-sm text-gray-500">Quand ?</span>
+							<span class="text-gray-300">|</span>
+							<span class="text-sm text-gray-500">Voyageurs</span>
+							<span class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-game to-game-dark text-white shadow-md transition hover:scale-110 active:scale-95">
+								<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+							</span>
+						</button>
+					</div>
+
+					<div class="flex items-center gap-2">
+						<a href="#" class="rounded-full px-4 py-2 text-sm font-semibold text-game transition hover:bg-violet-50 active:scale-95">Devenez hôte</a>
+						<button type="button" class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-200 transition hover:scale-105 hover:border-game-light hover:shadow-md active:scale-95">
+							<svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+						</button>
+						<button type="button" class="flex items-center gap-2 rounded-full border-2 border-gray-200 p-2 pl-3 pr-2 transition hover:scale-105 hover:border-game-light hover:shadow-md active:scale-95">
+							<svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+							<svg class="h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+						</button>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<main class="pt-16">
+			{# ----- Défi du jour (gamification) ----- #}
+			<section class="border-b border-violet-100 bg-gradient-to-r from-violet-50 to-cyan-50/50 py-6">
+				<div class="mx-auto max-w-7xl px-4 sm:px-6">
+					<div class="animate-fade-in-up flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-violet-200 bg-white p-4 shadow-lg shadow-violet-100/50 sm:p-6">
+						<div class="flex items-center gap-4">
+							<div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-game to-game-dark text-2xl shadow-lg shadow-violet-200/50 animate-float">🎯</div>
+							<div>
+								<p class="text-xs font-bold uppercase tracking-wide text-game">Défi du jour</p>
+								<h2 class="text-lg font-bold text-gray-900 sm:text-xl">Réservez un week-end → +150 XP</h2>
+								<p class="text-sm text-gray-600">Termine avant minuit pour débloquer le bonus.</p>
+							</div>
+						</div>
+						<div class="flex items-center gap-2">
+							<div class="h-3 w-32 overflow-hidden rounded-full bg-violet-200">
+								<div class="h-full w-2/3 rounded-full bg-gradient-to-r from-game to-game-light transition-all duration-700"></div>
+							</div>
+							<span class="text-sm font-bold text-game">2/3</span>
+						</div>
+						<button type="button" class="rounded-xl bg-gradient-to-r from-game to-game-dark px-5 py-2.5 font-semibold text-white shadow-lg shadow-violet-200/50 transition hover:scale-105 hover:shadow-xl active:scale-95">Voir les logements</button>
+					</div>
+				</div>
+			</section>
+
+			{# ----- Filtres ----- #}
+			<section class="border-b border-gray-100 bg-white py-4">
+				<div class="mx-auto max-w-7xl px-4 sm:px-6">
+					<div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+						<button type="button" class="flex shrink-0 flex-col items-center gap-1.5 rounded-xl border-2 border-game bg-violet-50 px-4 pb-3 pt-2 text-game transition hover:bg-violet-100">
+							<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+							<span class="text-xs font-semibold">Logements</span>
+						</button>
+						<button type="button" class="flex shrink-0 flex-col items-center gap-1.5 rounded-xl border-2 border-transparent px-4 pb-3 pt-2 text-gray-500 transition hover:border-gray-200 hover:text-gray-700">
+							<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.242 4.243 3 3 0 004.242-4.243z"/></svg>
+							<span class="text-xs font-medium">Expériences</span>
+						</button>
+						<button type="button" class="flex shrink-0 flex-col items-center gap-1.5 rounded-xl border-2 border-transparent px-4 pb-3 pt-2 text-gray-500 transition hover:border-gray-200 hover:text-gray-700">
+							<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-2a4 4 0 014-4h3.5M17 21v-2a4 4 0 00-4-4H14m-4-4a4 4 0 114-8 0 0 0-2 7H6"/></svg>
+							<span class="text-xs font-medium">Séjours</span>
+						</button>
+					</div>
+				</div>
+			</section>
+
+			{# ----- Grille logements + XP sur les cartes ----- #}
+			<section class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+				<div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+					<h2 class="text-2xl font-bold text-gray-900">Explorer · Gagner des XP</h2>
+					<div class="flex items-center gap-2 text-sm">
+						<button type="button" class="rounded-xl border-2 border-gray-200 px-4 py-2 font-medium transition hover:border-game-light hover:bg-violet-50 active:scale-95">Options</button>
+						<button type="button" class="rounded-xl border-2 border-gray-200 px-4 py-2 font-medium transition hover:border-game-light hover:bg-violet-50 active:scale-95">Carte</button>
+					</div>
+				</div>
+
+				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+					{% for i in 1..8 %}
+						<a href="{{ path('app_property_show', { id: i }) }}" class="group flex flex-col opacity-0 animate-fade-in-up transition-transform duration-300 hover:-translate-y-1" style="animation-delay: {{ (i - 1) * 0.05 }}s">
+							<div class="relative mb-3 aspect-[4/3] overflow-hidden rounded-2xl bg-gray-200 shadow-md transition-all duration-300 group-hover:shadow-xl group-hover:shadow-violet-100/50">
+								<img
+									src="https://picsum.photos/400/300?random={{ i }}"
+									alt="Logement {{ i }}"
+									class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+									loading="lazy"
+								/>
+								{# Badge XP gamifié #}
+								<div class="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-black/70 px-2.5 py-1.5 text-xs font-bold text-white backdrop-blur-sm">
+									<span class="text-cyan-300">+{{ 50 + i * 15 }} XP</span>
+									<span class="text-white/80">résa</span>
+								</div>
+								<button type="button" class="absolute right-3 top-3 rounded-full p-2.5 text-white/90 transition hover:scale-110 hover:text-red-400 active:scale-95" aria-label="Favoris">
+									<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+								</button>
+								<div class="absolute bottom-3 left-3 flex gap-2">
+									<span class="rounded-lg bg-white/95 px-2.5 py-1 text-xs font-semibold text-gray-800 shadow">Nouveau</span>
+								</div>
+							</div>
+							<div class="flex flex-1 flex-col">
+								<div class="mb-1 flex items-center justify-between">
+									<span class="font-semibold text-gray-900">Paris, France</span>
+									<span class="flex items-center gap-0.5 rounded-full bg-amber-100 px-2 py-0.5 text-sm font-bold text-amber-800">
+										<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+										4,89
+									</span>
+								</div>
+								<p class="text-sm text-gray-500">À 2 km du centre</p>
+								<p class="mt-1 text-sm text-gray-500">12–17 mars</p>
+								<p class="mt-1 text-sm font-medium">
+									<span class="font-bold text-gray-900">125 €</span>
+									<span class="text-gray-600"> nuit</span>
+								</p>
+							</div>
+						</a>
+					{% endfor %}
+				</div>
+			</section>
+
+			{# ----- Devenez hôte + XP ----- #}
+			<section class="border-t border-violet-100 bg-gradient-to-br from-violet-50 to-cyan-50/30 py-16">
+				<div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-4 sm:flex-row sm:px-6">
+					<div class="max-w-xl animate-fade-in-up">
+						<div class="mb-2 inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-800">🏠 +500 XP en devenant hôte</div>
+						<h2 class="text-3xl font-bold text-gray-900">Devenez hôte</h2>
+						<p class="mt-2 text-gray-600">Gagnez un revenu et des XP en partageant votre logement. Plus vous accueillez, plus vous montez en niveau.</p>
+						<a href="#" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-game to-game-dark px-6 py-3 font-semibold text-white shadow-lg shadow-violet-200/50 transition hover:scale-105 hover:shadow-xl active:scale-95">En savoir plus</a>
+					</div>
+					<div class="w-full max-w-md overflow-hidden rounded-2xl border-2 border-violet-100 bg-white shadow-xl shadow-violet-100/50 transition hover:scale-[1.02]">
+						<img src="https://picsum.photos/600/400?random=host" alt="Hôte" class="h-full w-full object-cover" loading="lazy"/>
+					</div>
+				</div>
+			</section>
+
+			{# ----- Footer ----- #}
+			<footer class="border-t border-gray-200 bg-white py-12">
+				<div class="mx-auto max-w-7xl px-4 sm:px-6">
+					<div class="flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-8">
+						<div class="flex items-center gap-2">
+							<span class="text-xl font-bold bg-gradient-to-r from-game to-game-dark bg-clip-text text-transparent">StayQuest</span>
+							<span class="text-sm text-gray-500">— Voyagez, gagnez, level up.</span>
+						</div>
+						<div class="flex gap-4 text-sm text-gray-600">
+							<a href="#" class="transition hover:text-game hover:underline">Confidentialité</a>
+							<a href="#" class="transition hover:text-game hover:underline">Conditions</a>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</main>
+	</div>
+{% endblock %}

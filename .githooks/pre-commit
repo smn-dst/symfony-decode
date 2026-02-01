@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Hook pre-commit : vérifie le style du code PHP avant chaque commit
+
+echo "Vérification du code..."
+# ↑ Affiche un message dans le terminal
+
+./vendor/bin/php-cs-fixer fix --dry-run --diff
+# ↑ Lance PHP-CS-Fixer en mode "dry-run" (il regarde mais ne modifie rien)
+#   --diff = montre les différences s'il y a des erreurs
+
+if [ $? -ne 0 ]; then
+# ↑ Si la commande précédente a échoué (erreur de style trouvée)
+    echo ""
+    echo "Erreur de style détectée !"
+    echo "Pour corriger automatiquement : ./vendor/bin/php-cs-fixer fix"
+    exit 1 # ← Bloque le commit
+fi
+
+echo "Analyse statique (PHPStan)..."
+./vendor/bin/phpstan analyse --memory-limit=512M
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "Erreur d'analyse statique (PHPStan) !"
+    exit 1
+fi
+
+echo "Code OK !"
+# ↑ Si on arrive ici, tout va bien

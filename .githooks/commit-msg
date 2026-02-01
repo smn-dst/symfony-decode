@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Hook commit-msg : vérifie le format du message de commit
+# Format attendu : type: description
+# Exemple : feat: ajout de la page login
+
+MESSAGE=$(cat "$1")
+
+# Regex simple : type suivi de : et d'un espace puis du texte
+if ! echo "$MESSAGE" | grep -qE "^(feat|fix|docs|style|refactor|test|chore): .+"; then
+    echo ""
+    echo "Format de commit invalide !"
+    echo ""
+    echo "Format attendu : type: description"
+    echo ""
+    echo "Types autorisés :"
+    echo "  feat     - nouvelle fonctionnalité"
+    echo "  fix      - correction de bug"
+    echo "  docs     - documentation"
+    echo "  style    - formatage du code"
+    echo "  refactor - refactoring"
+    echo "  test     - ajout de tests"
+    echo "  chore    - maintenance"
+    echo ""
+    echo "Exemple : feat: ajout de la page login"
+    exit 1
+fi
+
+echo "Message de commit OK !"
