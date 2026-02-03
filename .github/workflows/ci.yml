@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - src
+      - .github/workflows/ci.yml
 
 # On définit les jobs qui seront exécutés
 jobs:
