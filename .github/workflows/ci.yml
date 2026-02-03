@@ -15,9 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Say Hello World"
-        run: |
-          echo "Hello world!"
-          exit 1
+        run: echo "Hello world!"
+
+      - name: "List current folder"
+        run: ls -la
+
+      - name: "Create file"
+        run: touch test-file
+
+      - name: "List current folder after creating file"
+        run: ls -la
 
   unit-tests:
     needs: ["hello"]
