@@ -7,6 +7,7 @@ on:
     paths:
       - src
       - .github/workflows/ci.yml
+      - assets
 
 # On définit les jobs qui seront exécutés
 jobs:
