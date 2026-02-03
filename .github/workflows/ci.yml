@@ -1,0 +1,17 @@
+# On commence toujours par le nom de la workflow
+name: "CI PHP"
+
+# On définit les événements qui déclenchent la workflow
+on:
+  push:
+    paths:
+      - src
+
+# On définit les jobs qui seront exécutés
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Say Hello World"
+        run: echo "Hello, world!"
+     
