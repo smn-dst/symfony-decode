@@ -28,7 +28,7 @@ jobs:
         run: ls -la
 
   lint:
-    name: "Lint tests"
+    name: "Lint tests run lint"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
