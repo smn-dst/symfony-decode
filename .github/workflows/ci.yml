@@ -5,9 +5,9 @@ name: "CI PHP"
 on:
   push:
     paths:
-      - src
+      - src/**
       - .github/workflows/ci.yml
-      - assets
+      - assets/**
 
 # On définit les jobs qui seront exécutés
 jobs:

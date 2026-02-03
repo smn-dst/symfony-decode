@@ -7,4 +7,4 @@ import './stimulus_bootstrap.js';
  */
 import './styles/app.css';
 
-console.log('Bienvenue dans la première application Symfony 🎉 Ceci est un message de test pour la CI mise en place');
+console.log('Bienvenue dans la première application Symfony 🎉 Ceci est un message de test pour la CI mise en place 3.0');
