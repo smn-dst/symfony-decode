@@ -31,16 +31,19 @@ jobs:
     name: "Lint tests"
     runs-on: ubuntu-latest
     steps:
-      - run: env
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+      - run: npm install -D
+      - run: npm run lint
 
   unit-tests:
-    needs: ["hello"]
+    needs: ["lint"]
     runs-on: ubuntu-latest
     steps:
       - run: echo "Running unit tests"
 
   functional-tests:
-    needs: ["hello"]
+    needs: ["lint"]
     runs-on: ubuntu-latest
     steps:
      - run: echo "Running functions tests"
