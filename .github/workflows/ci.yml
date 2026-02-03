@@ -12,6 +12,7 @@ on:
 # On définit les jobs qui seront exécutés
 jobs:
   hello:
+    if: false # This job will not run
     runs-on: ubuntu-latest
     steps:
       - name: "Say Hello World"
@@ -25,6 +26,12 @@ jobs:
 
       - name: "List current folder after creating file"
         run: ls -la
+
+  lint:
+    name: "Lint tests"
+    runs-on: ubuntu-latest
+    steps:
+      - run: env
 
   unit-tests:
     needs: ["hello"]
