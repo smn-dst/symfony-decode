@@ -8,6 +8,6 @@ final class ExampleTest extends TestCase
 {
     public function testUnitExample(): void
     {
-        self::assertTrue(true);
+        self::assertSame(2, 1 + 1);
     }
 }
