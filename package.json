@@ -9,7 +9,9 @@
   "scripts": {
     "lint": "eslint .",
     "commit-lint": "commitlint --edit",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "e2e": "cypress run",
+    "e2e:open": "cypress open"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,13 @@
   "devDependencies": {
     "@commitlint/cli": "^20.3.1",
     "@commitlint/config-conventional": "^20.3.1",
+    "cypress": "^13.6.0",
     "eslint": "^9.39.2"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "postcss": "^8.5.6",
+    "postcss-loader": "^8.2.0",
+    "tailwindcss": "^4.1.18"
   }
 }

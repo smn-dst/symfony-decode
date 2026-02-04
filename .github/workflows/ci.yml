@@ -8,6 +8,9 @@ on:
       - src/**
       - .github/workflows/ci.yml
       - assets/**
+      - tests/**
+      - package.json
+      - package-lock.json
 
 # On définit les jobs qui seront exécutés
 jobs:
@@ -27,29 +30,101 @@ jobs:
       - name: "List current folder after creating file"
         run: ls -la
 
-  lint:
-    name: "Lint tests run lint script"
+  lint-js:
+    name: "Lint JS (ESLint)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
-      - run: npm install -D
+      - run: npm ci
       - run: npm run lint
 
-  unit-tests:
-    needs: ["lint"]
+  php-quality:
+    name: "Lint PHP (PHP-CS-Fixer + PHPStan)"
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Running unit tests"
+      - uses: actions/checkout@v6
+      - uses: actions/setup-php@v6
+        with:
+          php-version: "8.4"
+      - run: composer install --no-progress
+      - run: composer run quality
+
+  unit-tests:
+    name: "Tests unitaires (PHPUnit)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-php@v6
+        with:
+          php-version: "8.4"
+      - run: composer install --no-progress
+      - run: composer run phpunit:unit
 
   functional-tests:
-    needs: ["lint"]
+    name: "Tests fonctionnels (PHPUnit)"
     runs-on: ubuntu-latest
     steps:
-     - run: echo "Running functions tests"
+      - uses: actions/checkout@v6
+      - uses: actions/setup-php@v6
+        with:
+          php-version: "8.4"
+      - run: composer install --no-progress
+      - run: composer run phpunit:functional
+
+  health-check:
+    name: "Health-check (app répond en HTTP)"
+    needs: ["lint-js", "php-quality"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-php@v6
+        with:
+          php-version: "8.4"
+      - run: composer install --no-progress
+      - name: Démarrer le serveur PHP
+        run: |
+          composer serve &
+          sleep 3s
+      - name: Vérifier que l'app répond
+        run: |
+          curl http://127.0.0.1:8000/home
 
   build:
-    needs: ["unit-tests", "functional-tests"]
+    name: "Build"
+    needs: ["unit-tests", "functional-tests", "health-check"]
     runs-on: ubuntu-latest
     steps:
-     - run: echo "Building the project"
+      - uses: actions/checkout@v6
+      - uses: actions/setup-php@v6
+        with:
+          php-version: "8.4"
+      - run: composer install --no-progress --no-dev
+      - run: echo "Build terminé"
+
+  e2e:
+    name: "Tests e2e (Cypress)"
+    needs: ["build"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+      - uses: actions/setup-php@v6
+        with:
+          php-version: "8.4"
+      - run: composer install --no-progress
+      - run: npm ci
+      - name: Démarrer le serveur et lancer Cypress
+        run: |
+          php -S 127.0.0.1:8000 -t public &
+          sleep 3s
+          npx cypress run
+
+  notify:
+    name: "Résultat CI"
+    needs: ["lint-js", "php-quality", "unit-tests", "functional-tests", "health-check", "build", "e2e"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Afficher le résultat
+        run: |
+          echo "Toutes les étapes ont été exécutées avec succès"

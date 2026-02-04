@@ -81,6 +81,9 @@
         "cs-check": "php-cs-fixer fix --dry-run --diff",
         "cs-fix": "php-cs-fixer fix",
         "phpstan": "phpstan analyse --memory-limit=512M",
+        "phpunit": "phpunit",
+        "phpunit:unit": "phpunit --testsuite Unit",
+        "phpunit:functional": "phpunit --testsuite Functional",
         "quality": [
             "@cs-check",
             "@phpstan"
