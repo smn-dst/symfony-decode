@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-php@v2
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.4"
       - run: composer install --no-progress
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-php@v2
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.4"
       - run: composer install --no-progress
@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-php@v2
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.4"
       - run: composer install --no-progress
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-php@v2
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.4"
       - run: composer install --no-progress
@@ -96,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-php@v2
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.4"
       - run: composer install --no-progress --no-dev
@@ -109,7 +109,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
-      - uses: actions/setup-php@v2
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.4"
       - run: composer install --no-progress
