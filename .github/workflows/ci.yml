@@ -40,47 +40,55 @@ jobs:
       - run: npm run lint
 
   php-quality:
+    env:
+      APP_ENV: test
     name: "Lint PHP (PHP-CS-Fixer + PHPStan)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
+      - name: Préparer .env pour la CI
+        run: cp .env.test .env
       - run: composer install --no-progress
       - run: composer run quality
 
   unit-tests:
+    env:
+      APP_ENV: test
     name: "Tests unitaires (PHPUnit)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
+      - name: Préparer .env pour la CI
+        run: cp .env.test .env
       - run: composer install --no-progress
       - run: composer run phpunit:unit
 
   functional-tests:
+    env:
+      APP_ENV: test
     name: "Tests fonctionnels (PHPUnit)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
+      - name: Préparer .env pour la CI
+        run: cp .env.test .env
       - run: composer install --no-progress
       - run: composer run phpunit:functional
 
   health-check:
+    env:
+      APP_ENV: test
     name: "Health-check (app répond en HTTP)"
-    needs: ["lint-js", "php-quality"]
+    needs: ["lint-js", "php-quality", "unit-tests", "functional-tests"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
+      - name: Préparer .env pour la CI
+        run: cp .env.test .env
       - run: composer install --no-progress
       - name: Démarrer le serveur PHP
         run: |
@@ -91,18 +99,22 @@ jobs:
           curl http://127.0.0.1:8000/home
 
   build:
+    env:
+      APP_ENV: test
     name: "Build"
-    needs: ["unit-tests", "functional-tests", "health-check"]
+    needs: ["health-check"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
+      - name: Préparer .env pour la CI
+        run: cp .env.test .env
       - run: composer install --no-progress --no-dev
       - run: echo "Build terminé"
 
   e2e:
+    env:
+      APP_ENV: test
     name: "Tests e2e (Cypress)"
     needs: ["build"]
     runs-on: ubuntu-latest
@@ -110,8 +122,8 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
       - uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
+      - name: Préparer .env pour la CI
+        run: cp .env.test .env
       - run: composer install --no-progress
       - run: npm ci
       - name: Démarrer le serveur et lancer Cypress
