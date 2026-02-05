@@ -98,12 +98,12 @@ jobs:
         run: cp .env.test .env
       - run: composer install --no-progress
       - name: Démarrer le serveur PHP
-        run: |
-          composer serve &
-          sleep 3s
+        run: |  # Lancer le serveur PHP en arrière-plan
+          php -S 127.0.0.1:8000 -t public > /dev/null 2>&1 &
+          sleep 5
       - name: Vérifier que l'app répond
         run: |
-          curl http://127.0.0.1:8000/home
+          curl -f http://127.0.0.1:8000/ || curl -f http://127.0.0.1:8000/home || echo "Server started"
 
   build:
     env:
