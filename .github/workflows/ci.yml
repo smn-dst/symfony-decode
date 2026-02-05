@@ -145,7 +145,7 @@ jobs:
           php bin/console cache:clear --env=test --no-debug
           php bin/console cache:warmup --env=test --no-debug
       
-      - run: composer install --no-progress --no-dev --optimize-autoloader
+      - run: composer install --no-progress --no-dev --optimize-autoloader --no-scripts
       
       - run: echo "Build OK"
 
