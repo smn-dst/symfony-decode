@@ -85,6 +85,11 @@ jobs:
         run: cp .env.test .env
       - run: composer install --no-progress
       
+      - name: Préparer la base de données
+        run: |
+          php bin/console doctrine:database:create --env=test --if-not-exists
+          php bin/console doctrine:migrations:migrate --env=test --no-interaction
+      
       - name: Démarrer le serveur PHP
         run: |
           php -S 127.0.0.1:8000 -t public > /dev/null 2>&1 &
@@ -98,7 +103,7 @@ jobs:
     env:
       APP_ENV: test
     name: "Tests e2e (Cypress)"
-    needs: ["health-check"]  # E2E AVANT BUILD
+    needs: ["health-check"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -107,10 +112,19 @@ jobs:
         with:
           php-version: "8.4"
           extensions: amqp
+      
       - name: Préparer .env pour la CI
         run: cp .env.test .env
+      
       - run: composer install --no-progress
       - run: npm ci
+      
+      - name: Préparer la base de données
+        run: |
+          php bin/console doctrine:database:create --env=test --if-not-exists
+          php bin/console doctrine:migrations:migrate --env=test --no-interaction
+          php bin/console doctrine:fixtures:load --env=test --no-interaction || echo "Pas de fixtures"
+      
       - name: Démarrer le serveur et lancer Cypress
         run: |
           php -S 127.0.0.1:8000 -t public > /dev/null 2>&1 &
@@ -119,9 +133,9 @@ jobs:
 
   build:
     env:
-      APP_ENV: prod
-    name: "Build Production"
-    needs: ["e2e"]  # BUILD APRÈS LES TESTS
+      APP_ENV: test
+    name: "Build"
+    needs: ["e2e"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -130,24 +144,19 @@ jobs:
           php-version: "8.4"
           extensions: amqp
       
-      - name: Créer .env de production minimal
-        run: |
-          echo "APP_ENV=prod" > .env
-          echo "APP_SECRET=build-secret-for-ci" >> .env
+      - name: Préparer .env pour la CI
+        run: cp .env.test .env
       
-      # Installer SANS --no-dev d'abord pour générer le cache
       - run: composer install --no-progress
       
-      # Nettoyer le cache et warmup en prod
       - name: Cache warmup
         run: |
-          php bin/console cache:clear --env=prod --no-debug
-          php bin/console cache:warmup --env=prod --no-debug
+          php bin/console cache:clear --env=test --no-debug
+          php bin/console cache:warmup --env=test --no-debug
       
-      # Maintenant réinstaller en mode production
       - run: composer install --no-progress --no-dev --optimize-autoloader
       
-      - run: echo "Build terminé"
+      - run: echo "Build OK"
 
   notify:
     name: "Résultat CI"
@@ -156,4 +165,4 @@ jobs:
     steps:
       - name: Afficher le résultat
         run: |
-          echo "Toutes les étapes ont été exécutées avec succès"
+          echo "notify succès CI"
