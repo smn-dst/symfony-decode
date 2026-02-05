@@ -9,6 +9,7 @@ on:
       - tests/**
       - package.json
       - package-lock.json
+      - phpstan.dist.neon
 
 jobs:
   hello:
