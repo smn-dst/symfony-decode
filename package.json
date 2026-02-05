@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . | tee eslint-report.txt",
     "commit-lint": "commitlint --edit",
     "test": "echo \"Error: no test specified\" && exit 1",
     "e2e": "cypress run",

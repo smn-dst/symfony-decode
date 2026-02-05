@@ -21,15 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: shivammathur/setup-php@v2
-      - uses: actions/cache@v4
-        id: cache
         with:
           php-version: "8.4"
           extensions: amqp
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}-dev
       - run: composer install --no-progress
-        if: steps.cache.outputs.cache-hit != 'true'
 
   lint-js:
     name: "Lint JS (ESLint)"
@@ -39,6 +34,12 @@ jobs:
       - uses: actions/setup-node@v6
       - run: npm ci
       - run: npm run lint
+
+      - name: "Upload eslint report"
+        uses: actions/upload-artifact@v4
+        with:
+          name: eslint-report
+          path: eslint-report.txt
 
   php-quality:
     env:
@@ -53,10 +54,7 @@ jobs:
           extensions: amqp
       - name: Préparer .env pour la CI
         run: cp .env.test .env
-      - uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}-dev
-          path: vendor
+      - run: composer install --no-progress
       - run: composer run quality
 
   unit-tests:
@@ -71,11 +69,8 @@ jobs:
           php-version: "8.4"
           extensions: amqp
       - name: Préparer .env pour la CI
-        run: cp .env.test .env      
-      - uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}-dev
-          path: vendor
+        run: cp .env.test .env
+      - run: composer install --no-progress
       - run: composer run phpunit:unit
 
   functional-tests:
@@ -91,10 +86,7 @@ jobs:
           extensions: amqp
       - name: Préparer .env pour la CI
         run: cp .env.test .env
-      - uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}-dev
-          path: vendor
+      - run: composer install --no-progress
       - run: composer run phpunit:functional
 
   health-check:
@@ -111,10 +103,7 @@ jobs:
           extensions: amqp
       - name: Préparer .env pour la CI
         run: cp .env.test .env
-      - uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}-dev
-          path: vendor
+      - run: composer install --no-progress
       
       - name: Démarrer le serveur PHP
         run: |
@@ -142,10 +131,7 @@ jobs:
       - name: Préparer .env pour la CI
         run: cp .env.test .env
       
-      - uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}-dev
-          path: vendor
+      - run: composer install --no-progress
       - run: npm ci
       
       - name: Démarrer le serveur et lancer Cypress
@@ -170,10 +156,7 @@ jobs:
       - name: Préparer .env pour la CI
         run: cp .env.test .env
       
-      - uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}-dev
-          path: vendor
+      - run: composer install --no-progress
       
       - name: Cache warmup
         run: |
