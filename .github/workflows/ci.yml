@@ -85,10 +85,6 @@ jobs:
         run: cp .env.test .env
       - run: composer install --no-progress
       
-      - name: Préparer la base de données
-        run: |
-          php bin/console doctrine:migrations:migrate --env=test --no-interaction
-      
       - name: Démarrer le serveur PHP
         run: |
           php -S 127.0.0.1:8000 -t public > /dev/null 2>&1 &
